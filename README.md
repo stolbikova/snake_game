@@ -1,9 +1,8 @@
 # snake_game
 
-Игра змейка.
+Snake game
 
-Для запуска - откройте index.html в браузере.
+In order to play, open index.html in a browser
 
-Управлять змейкой можно клавишами: вперёд, назад, вправо, влево.
-Цель игры - съесть еду. После каждой съеденной еды - змейка растёт и ускоряется.
-
+The snake is controlled by arrow buttons: forward, back, left, right.
+Game goal is to eat food. After each eaten food the snake grows and speeds up.
