@@ -4,10 +4,13 @@ const speedCoef = 1.4
 const scl = 1
 
 let renderFreq
+
+// objects
+let food
 let snake
+
 let ctx
-let foodCoords
-let score = 0
+let score
 let procId
 
 
@@ -17,26 +20,21 @@ window.onload = function init() {
     ctx = canvas.getContext("2d");
     document.addEventListener("keydown", onKeyDown);
 
+    score = 0
+
     snake = new Snake();
-    this.setFoodCoords();
+    food = new Food();
+
+    food.setCoords();
 
     renderFreq = 4
     procId = setInterval(draw, 1000 / renderFreq);
 }
 
-function setFoodCoords() {
-    foodCoords = {
-        x: getRandomInt(1, Math.floor(width/scl)),
-        y: getRandomInt(1, Math.floor(height/scl)),
-    }
-    console.log('food', foodCoords)
-}
-
 function setScore() {
-    const scoreEl = document.getElementById("score");
-
     score++
-
+    
+    const scoreEl = document.getElementById("score");
     scoreEl.innerHTML = `Score: ${score}`
 }
 
@@ -47,19 +45,19 @@ function draw() {
 
     // food
     ctx.fillStyle = "#cd0000";
-    ctx.fillRect(foodCoords.x, foodCoords.y, scl, scl);
+    ctx.fillRect(food.x, food.y, scl, scl);
 
     // snake
     snake.update()
     snake.show()
-    if (snake.isDeath()) {
+    if (snake.isDead()) {
         console.log('Game over')
         stopDraw()
     }
     if (snake.isSuccess()) {
         setDraw()
         setScore()
-        setFoodCoords()
+        food.setCoords()
         snake.size ++ 
     }
 }
@@ -90,9 +88,19 @@ function onKeyDown(e) {
     }
 }
 
+function Food() {
+    this.x = getRandomInt(1, width - 1)
+    this.y = getRandomInt(1, height - 1)
+
+    this.setCoords = function() {
+        this.x = getRandomInt(1, width - 1)
+        this.y = getRandomInt(1, height - 1)
+    }
+}
+
 function Snake() {
-    this.x = getRandomInt(1, Math.floor(width/scl));
-    this.y = getRandomInt(1, Math.floor(height/scl));
+    this.x = getRandomInt(1, width - 1);
+    this.y = getRandomInt(1, height - 1);
     this.vx = 0;
     this.vy = 1;
     this.size = 0;
@@ -135,14 +143,14 @@ function Snake() {
     }
 
     this.isSuccess = function () {
-        if(dist(this.x, this.y, foodCoords.x,  foodCoords.y) < 1) {
+        if(dist(this.x, this.y, food.x,  food.y) < 1) {
             return true
         }
 
         return false
     }
 
-    this.isDeath = function () {
+    this.isDead = function () {
         if(!isValid(this.x) || !isValid(this.y)) {
             return true
         }
