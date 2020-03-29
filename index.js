@@ -1,6 +1,6 @@
 //Constants
 const width = 50, height = 50
-const speedCoef = 1.4
+const speedCoef = 1.1
 const scl = 1
 
 let renderFreq
@@ -62,6 +62,9 @@ function draw() {
     }
 }
 
+/*
+    setDraw - Set new frequency of draw
+*/
 function setDraw() {
     renderFreq *= speedCoef
 
@@ -69,6 +72,9 @@ function setDraw() {
     procId = setInterval(draw, 1000 / renderFreq);
 }
 
+/*
+    stopDraw - Stop the draw if game is over
+*/
 function stopDraw() {
     clearInterval(procId);
 }
@@ -83,9 +89,25 @@ function onKeyDown(e) {
 
     const coords = data[event.code]
 
-    if (coords) {
+    if (coords && !isBackward(coords)) {
         snake.setDir(coords)
     }
+}
+
+/*
+    isBackward -  Check if snake moves towards itself
+    params - speed direction to x and y
+    return - true - if snake moves towards itsels, false - if does not.
+*/
+function isBackward(params) {
+    if (snake.size === 0) {
+        return false
+    }
+    
+    const { x, y }  = params
+
+    return (snake.vx === x && snake.vy === -y) ||
+        (snake.vx === -x && snake.vy === -y)
 }
 
 function Food() {
@@ -126,8 +148,6 @@ function Snake() {
 
         this.x = this.x + this.vx*scl
         this.y = this.y + this.vy*scl
-
-        console.log('snake', this.x, this.y)
     }
 
     this.show = function () {
