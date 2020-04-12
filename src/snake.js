@@ -1,13 +1,12 @@
 import { getRandomInt, dist } from "./utils"
 
 export default function Snake({ 
-     width,
-     height,
+     range,
      ctx,
      scl,
-}) {
-    this.x = getRandomInt(1, width - 1);
-    this.y = getRandomInt(1, height - 1);
+}) {    
+    this.x = getRandomInt(range, scl);
+    this.y = getRandomInt(range, scl);
     this.vx = 0;
     this.vy = 1;
     this.size = 0;
@@ -78,6 +77,6 @@ export default function Snake({
     }
 
     const isValid = (val) => {
-        return val < width - scl && val > 0
+        return val < range - scl && val > 0
     }
 }

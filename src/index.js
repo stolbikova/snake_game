@@ -4,7 +4,7 @@ import Food from './food.js'
 //Constants
 const width = 50, height = 50
 const speedCoef = 1.1
-const scl = 1
+const scl = 2
 
 let renderFreq
 
@@ -25,10 +25,12 @@ window.onload = function init() {
 
     score = 0
 
-    snake = new Snake({ width, height, ctx, scl });
-    food = new Food({ width, height });
+    snake = new Snake({ range: width, ctx, scl });
+    food = new Food({ range: width, scl });
 
-    food.setCoords();
+    do {
+        food.setCoords()
+    } while(!isFoodValid({ food, snake }))
 
     renderFreq = 4
     procId = setInterval(draw, 1000 / renderFreq);
@@ -42,8 +44,6 @@ function setScore() {
 }
 
 function draw() {
-    console.log('draw')
-
     //background
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, width, height);
@@ -62,7 +62,11 @@ function draw() {
     if (snake.isSuccess(food)) {
         setDraw()
         setScore()
-        food.setCoords()
+
+        do {
+            food.setCoords()
+        } while(!isFoodValid({ food, snake }));
+
         snake.size ++ 
     }
 }
@@ -115,3 +119,19 @@ function isBackward(params) {
         (snake.vx === -x && snake.vy === -y)
 }
 
+
+function isFoodValid({ food, snake }) {
+    if (food.x === snake.x && food.y === snake.y) {
+        return false
+    }
+    
+    for(let i = 0; i < snake.tails.length; i++) {
+        const tail = snake.tails[i]
+
+        if (tail.x === food.x && tail.y === food.y) {
+            return false
+        }
+    }
+
+    return true
+}

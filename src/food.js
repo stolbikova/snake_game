@@ -1,12 +1,12 @@
 
-import { getRandomInt } from "./utils"
+import { getRandomInt, getMax } from "./utils"
 
-export default function Food({ width, height }) {
-    this.x = getRandomInt(1, width - 1)
-    this.y = getRandomInt(1, height - 1)
+export default function Food({ range, scl }) {
+    this.x = getRandomInt(range, scl)
+    this.y = getRandomInt(range, scl)
 
     this.setCoords = function() {
-        this.x = getRandomInt(1, width - 1)
-        this.y = getRandomInt(1, height - 1)
+        this.x = getRandomInt(range, scl)
+        this.y = getRandomInt(range, scl)
     }
 }
